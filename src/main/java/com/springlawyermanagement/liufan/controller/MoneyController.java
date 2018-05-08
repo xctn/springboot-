@@ -29,10 +29,10 @@ public class MoneyController {
     * @return
     */
     //请求的路径，方式
-    @RequestMapping(value = "showlawyermoney", method = RequestMethod.GET)
+    @RequestMapping(value = "showcost", method = RequestMethod.GET)
     @ResponseBody public List showlawyermoney(HttpServletRequest request) {
  
-        //可以使用teamname获取url路径分隔
+        //律师可以看到自己承接的已结案的案件信息
  
 
         //获取请求的参数
@@ -43,10 +43,7 @@ public class MoneyController {
         MongoDatabase db = MongoUtils.getDatabase();  
         System.out.println("Connect to mongodb database successfully");  
 
-        //创建 collection
-        // db.createCollection("layor");
-        // System.out.println("集合创建成功");
-
+        
         //连接collection
         MongoCollection<Document> collection = db.getCollection("case");
          System.out.println("集合 user 连接成功");
@@ -69,7 +66,7 @@ public class MoneyController {
     @RequestMapping(value = "showallmoney", method = RequestMethod.GET)
     @ResponseBody public List showallmoney(HttpServletRequest request) {
  
-        //可以使用teamname获取url路径分隔
+        //管理员可以看到所有已结案的案件信息
  
 
         //获取请求的参数
@@ -79,9 +76,7 @@ public class MoneyController {
         MongoDatabase db = MongoUtils.getDatabase();  
         System.out.println("Connect to mongodb database successfully");  
 
-        //创建 collection
-        // db.createCollection("layor");
-        // System.out.println("集合创建成功");
+    
 
         //连接collection
         MongoCollection<Document> collection = db.getCollection("case");

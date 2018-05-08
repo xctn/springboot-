@@ -34,8 +34,8 @@ public class CaseController {
     @RequestMapping(value = "create", method = RequestMethod.GET)
     @ResponseBody public String createcase(HttpServletRequest request) {
  
-        //可以使用teamname获取url路径分隔
- 
+        //新增一条案件信息
+        
         //获取请求的参数
         
         String caseid = request.getParameter("caseid");
@@ -52,35 +52,23 @@ public class CaseController {
 
         MongoDatabase db = MongoUtils.getDatabase();  
 
-        //创建 collection
-        // db.createCollection("user");
-        // System.out.println("集合创建成功");
+       
 
         //连接collection
         MongoCollection<Document> collection = db.getCollection("case");
 
 
-        //插入Layor
+        //插入案件信息
         Document document = new Document("caseid",caseid).append("userid", userid).append("writeintime", writeintime).append("casetype", casetype).append("cost", cost).append("finish", finish).append("info", info).append("id", id);
 
-        //  List<Document> documents = new ArrayList<Document>();  
-        //  documents.add(document);  
-        //  collection.insertMany(documents); 
         
         
         //插入一条数据到数据库对应的表
         collection.insertOne(document);
 
-        //collection.deleteOne(new Document("age", "22"));
-
-         //collection.updateOne(Filters.eq("age", "23"), new Document("$set",new Document("age",100)));
-
 
         System.out.println("案件信息插入成功");  
       
-
- 
-        //Layor hr = new Layor(name, age);
  
         return "success";
     }
@@ -88,7 +76,7 @@ public class CaseController {
      @RequestMapping(value = "update", method = RequestMethod.GET)
      @ResponseBody public String updatecase(HttpServletRequest request) {
   
-         //可以使用teamname获取url路径分隔
+         //更改一条案件信息
   
          //获取请求的参数
          String id =request.getParameter("id");
@@ -100,32 +88,13 @@ public class CaseController {
          String finish = request.getParameter("finish");
          String info = request.getParameter("info");
          
- 
-         //连接数据库
-        
- 
-         //创建 collection
-         // db.createCollection("user");
-         // System.out.println("集合创建成功");
- 
-         //连接collection
+
          MongoDatabase db = MongoUtils.getDatabase(); 
          MongoCollection<Document> collection = db.getCollection("case");
           System.out.println("集合 case 连接成功");
  
  
-         //插入Layor
-         //db.user.update({'title':'MongoDB 教程'},{$set:{'title':'MongoDB'}});
- 
-         //  List<Document> documents = new ArrayList<Document>();  
-         //  documents.add(document);  
-         //  collection.insertMany(documents); 
-         
-         
-         //插入一条数据到数据库对应的表
- 
-         //collection.deleteOne(new Document("age", "22"));
-         //collection.deleteOne(filter)
+         //通过id来更改案件信息
  
           collection.updateOne(Filters.eq("id", id), new Document("$set",new Document("caseid",caseid)
           .append("userid",userid)
@@ -140,26 +109,22 @@ public class CaseController {
        
  
   
-         //Layor hr = new Layor(name, age);
   
          return "success";
      }
      @RequestMapping(value = "select", method = RequestMethod.GET)
     @ResponseBody public Document selectcase(HttpServletRequest request) {
  
-        //可以使用teamname获取url路径分隔
-        //按客户姓名查找
+        
+        //按caseid查找
 
-        //获取请求的参数
+       
         String caseid = request.getParameter("caseid");
 
         //连接数据库
         MongoDatabase db = MongoUtils.getDatabase();  
         System.out.println("Connect to mongodb database successfully");  
 
-        //创建 collection
-        // db.createCollection("layor");
-        // System.out.println("集合创建成功");
 
         //连接collection
         MongoCollection<Document> collection = db.getCollection("case");
@@ -186,11 +151,7 @@ public class CaseController {
             String id = request.getParameter("id");
             MongoDatabase db = MongoUtils.getDatabase();  
 
-        //创建 collection
-        // db.createCollection("case");
-        // System.out.println("集合创建成功");
-
-        //连接collection
+        //按id删除一条案件信息
         MongoCollection<Document> collection = db.getCollection("id");
         collection.deleteOne(Filters.eq("id", id));
         return "success";
@@ -199,7 +160,7 @@ public class CaseController {
     @RequestMapping(value = "showlawyerown", method = RequestMethod.GET)
         @ResponseBody public List showlawyerown(HttpServletRequest request) {
      
-            //可以使用teamname获取url路径分隔
+            
             //律师登录返回承接律师是自己的案件信息
     
             //获取请求的参数
@@ -209,9 +170,7 @@ public class CaseController {
             MongoDatabase db = MongoUtils.getDatabase();  
             System.out.println("Connect to mongodb database successfully");  
     
-            //创建 collection
-            // db.createCollection("layor");
-            // System.out.println("集合创建成功");
+            
     
             //连接collection
             MongoCollection<Document> collection = db.getCollection("case");
@@ -232,26 +191,20 @@ public class CaseController {
             @RequestMapping(value = "showadminown", method = RequestMethod.GET)
         @ResponseBody public List showadminown(HttpServletRequest request) {
      
-            //可以使用teamname获取url路径分隔
-            //管理员登录返回所有案件信息
+            //管理员登录返回所有的案件信息
     
-            //获取请求的参数
-            //String username = request.getParameter("username");
+       
     
             //连接数据库
             MongoDatabase db = MongoUtils.getDatabase();  
             System.out.println("Connect to mongodb database successfully");  
     
-            //创建 collection
-            // db.createCollection("layor");
-            // System.out.println("集合创建成功");
+            
     
             //连接collection
             MongoCollection<Document> collection = db.getCollection("case");
              System.out.println("集合 case 连接成功");
-     //  List<Document> documents = new ArrayList<Document>();  
-        //  documents.add(document);  
-        //  collection.insertMany(documents); 
+     
             
     
             FindIterable findIterable = collection.find();
@@ -268,7 +221,7 @@ public class CaseController {
         @RequestMapping(value = "showexistcaseidanduserid", method = RequestMethod.GET)
         @ResponseBody public List showexistcaseidanduserid(HttpServletRequest request) {
      
-            //可以使用teamname获取url路径分隔
+        
             //返回已存在的案件id和律师id
     
     
@@ -276,9 +229,7 @@ public class CaseController {
             MongoDatabase db = MongoUtils.getDatabase();  
             System.out.println("Connect to mongodb database successfully");  
     
-            //创建 collection
-            // db.createCollection("layor");
-            // System.out.println("集合创建成功");
+            
     
             //连接collection
             MongoCollection<Document> collection = db.getCollection("customer");

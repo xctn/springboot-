@@ -39,7 +39,7 @@ public class UserController {
     @RequestMapping(value = "create", method = RequestMethod.GET)
     @ResponseBody public String createuser(HttpServletRequest request) {
  
-        //可以使用teamname获取url路径分隔
+        //新增一条用户信息
  
         //获取请求的参数
         String userid = CommonUtils.getUUID();
@@ -58,9 +58,7 @@ public class UserController {
 
         MongoDatabase db = MongoUtils.getDatabase();  
 
-        //创建 collection
-        // db.createCollection("user");
-        // System.out.println("集合创建成功");
+      
 
         //连接collection
         MongoCollection<Document> collection = db.getCollection("user");
@@ -78,16 +76,14 @@ public class UserController {
         //插入一条数据到数据库对应的表
         collection.insertOne(document);
 
-        //collection.deleteOne(new Document("age", "22"));
-
-         //collection.updateOne(Filters.eq("age", "23"), new Document("$set",new Document("age",100)));
+        
 
 
         System.out.println("用户插入成功");  
       
 
  
-        //Layor hr = new Layor(name, age);
+       
  
         return "success";
     }
@@ -95,7 +91,7 @@ public class UserController {
     @RequestMapping(value = "update", method = RequestMethod.GET)
     @ResponseBody public String updateuser(HttpServletRequest request) {
  
-        //可以使用teamname获取url路径分隔
+        //更新一条用户信息
  
         //获取请求的参数
         String userid = request.getParameter("userid");
@@ -111,9 +107,7 @@ public class UserController {
         //连接数据库
        
 
-        //创建 collection
-        // db.createCollection("user");
-        // System.out.println("集合创建成功");
+        
 
         //连接collection
         MongoDatabase db = MongoUtils.getDatabase(); 
@@ -121,19 +115,8 @@ public class UserController {
          System.out.println("集合 user 连接成功");
 
 
-        //插入Layor
-        //db.user.update({'title':'MongoDB 教程'},{$set:{'title':'MongoDB'}});
-
-        //  List<Document> documents = new ArrayList<Document>();  
-        //  documents.add(document);  
-        //  collection.insertMany(documents); 
-        
-        
-        //插入一条数据到数据库对应的表
-
-        //collection.deleteOne(new Document("age", "22"));
-        //collection.deleteOne(filter)
-
+     
+        //根据userid更新一条用户信息
          collection.updateOne(Filters.eq("userid", userid), new Document("$set",new Document("username",username)
          .append("password",password)
          .append("type",type)
@@ -153,23 +136,25 @@ public class UserController {
         return "success";
     }
     @RequestMapping(value = "delete", method = RequestMethod.GET)
-        @ResponseBody public String deletelawyer(HttpServletRequest request) {
+        @ResponseBody public String deleteuser(HttpServletRequest request) {
+            //删除一条用户信息
             String userid = request.getParameter("userid");
+
             MongoDatabase db = MongoUtils.getDatabase();  
 
-        //创建 collection
-        // db.createCollection("user");
-        // System.out.println("集合创建成功");
+     
 
         //连接collection
         MongoCollection<Document> collection = db.getCollection("user");
+        //通过userid删除
         collection.deleteOne(Filters.eq("userid", userid));
+        
         return "success";}
 
         @RequestMapping(value = "select", method = RequestMethod.GET)
         @ResponseBody public Document selectlawyer(HttpServletRequest request) {
      
-            //可以使用teamname获取url路径分隔
+            //查找用户信息
      
     
             //获取请求的参数
@@ -179,16 +164,14 @@ public class UserController {
             MongoDatabase db = MongoUtils.getDatabase();  
             System.out.println("Connect to mongodb database successfully");  
     
-            //创建 collection
-            // db.createCollection("layor");
-            // System.out.println("集合创建成功");
+            
     
             //连接collection
             MongoCollection<Document> collection = db.getCollection("user");
              System.out.println("集合 username 连接成功");
     
             
-    
+            //通过username查找
             FindIterable findIterable = collection.find(Filters.eq("username", username));
             MongoCursor<Document> mongoCursor = findIterable.iterator();  
     
@@ -203,19 +186,14 @@ public class UserController {
         @RequestMapping(value = "admin", method = RequestMethod.GET)
         @ResponseBody public List adminselect(HttpServletRequest request) {
      
-            //可以使用teamname获取url路径分隔
-     
+            //管理员登录返回所有用户信息
     
-            //获取请求的参数
-            //String username = request.getParameter("username");
     
             //连接数据库
             MongoDatabase db = MongoUtils.getDatabase();  
             System.out.println("Connect to mongodb database successfully");  
     
-            //创建 collection
-            // db.createCollection("layor");
-            // System.out.println("集合创建成功");
+            
     
             //连接collection
             MongoCollection<Document> collection = db.getCollection("user");
@@ -237,9 +215,6 @@ public class UserController {
            // }
         }
  
- //  List<Document> documents = new ArrayList<Document>();  
-        //  documents.add(document);  
-        //  collection.insertMany(documents); 
 
     
 }

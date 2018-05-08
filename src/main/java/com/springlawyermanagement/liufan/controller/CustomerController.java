@@ -34,7 +34,7 @@ public class CustomerController {
     @RequestMapping(value = "create", method = RequestMethod.GET)
     @ResponseBody public String createcustomer(HttpServletRequest request) {
  
-        //可以使用teamname获取url路径分隔
+        //新增一条客户信息
  
         //获取请求的参数
         
@@ -50,35 +50,29 @@ public class CustomerController {
 
         MongoDatabase db = MongoUtils.getDatabase();  
 
-        //创建 collection
-        // db.createCollection("user");
-        // System.out.println("集合创建成功");
+        
 
         //连接collection
         MongoCollection<Document> collection = db.getCollection("customer");
 
 
-        //插入Layor
+        
         Document document = new Document("customername", customername).append("caseid", caseid).append("userid", userid).append("tel", tel).append("address", address).append("customerid", customerid);
 
-        //  List<Document> documents = new ArrayList<Document>();  
-        //  documents.add(document);  
-        //  collection.insertMany(documents); 
+     
         
         
         //插入一条数据到数据库对应的表
         collection.insertOne(document);
 
-        //collection.deleteOne(new Document("age", "22"));
-
-         //collection.updateOne(Filters.eq("age", "23"), new Document("$set",new Document("age",100)));
+       
 
 
         System.out.println("客户信息插入成功");  
       
 
  
-        //Layor hr = new Layor(name, age);
+        
  
         return "success";
     }
@@ -86,7 +80,7 @@ public class CustomerController {
      @RequestMapping(value = "update", method = RequestMethod.GET)
      @ResponseBody public String updatecustomer(HttpServletRequest request) {
   
-         //可以使用teamname获取url路径分隔
+         //更改一条律师信息
   
          //获取请求的参数
          String customerid =request.getParameter("customerid");
@@ -100,9 +94,7 @@ public class CustomerController {
          //连接数据库
         
  
-         //创建 collection
-         // db.createCollection("user");
-         // System.out.println("集合创建成功");
+        
  
          //连接collection
          MongoDatabase db = MongoUtils.getDatabase(); 
@@ -110,18 +102,7 @@ public class CustomerController {
           System.out.println("集合 customer 连接成功");
  
  
-         //插入Layor
-         //db.user.update({'title':'MongoDB 教程'},{$set:{'title':'MongoDB'}});
- 
-         //  List<Document> documents = new ArrayList<Document>();  
-         //  documents.add(document);  
-         //  collection.insertMany(documents); 
-         
-         
-         //插入一条数据到数据库对应的表
- 
-         //collection.deleteOne(new Document("age", "22"));
-         //collection.deleteOne(filter)
+        //根据客户id来更改客户信息
  
           collection.updateOne(Filters.eq("customerid", customerid), new Document("$set",new Document("customername", customername)
           .append("caseid", caseid)
@@ -141,7 +122,7 @@ public class CustomerController {
      @RequestMapping(value = "select", method = RequestMethod.GET)
     @ResponseBody public List selectcustomer(HttpServletRequest request) {
  
-        //可以使用teamname获取url路径分隔
+       
         //按客户姓名查找
 
         //获取请求的参数
@@ -151,9 +132,7 @@ public class CustomerController {
         MongoDatabase db = MongoUtils.getDatabase();  
         System.out.println("Connect to mongodb database successfully");  
 
-        //创建 collection
-        // db.createCollection("layor");
-        // System.out.println("集合创建成功");
+        
 
         //连接collection
         MongoCollection<Document> collection = db.getCollection("customer");
@@ -174,13 +153,15 @@ public class CustomerController {
     }
 
         @RequestMapping(value = "delete", method = RequestMethod.GET)
-        @ResponseBody public String deletelawyer(HttpServletRequest request) {
+        @ResponseBody public String deletecustomer(HttpServletRequest request) {
+            //删除一条客户信息
+            //获取参数
             String customerid = request.getParameter("customerid");
+
+
             MongoDatabase db = MongoUtils.getDatabase();  
 
-        //创建 collection
-        // db.createCollection("user");
-        // System.out.println("集合创建成功");
+        
 
         //连接collection
         MongoCollection<Document> collection = db.getCollection("customer");
@@ -191,8 +172,8 @@ public class CustomerController {
     @RequestMapping(value = "showlawyerown", method = RequestMethod.GET)
         @ResponseBody public List showlawyerown(HttpServletRequest request) {
      
-            //可以使用teamname获取url路径分隔
-            //律师登录返回承接律师是自己的客户信息
+            
+            //律师登录时返回的是自己承接的客户的信息
     
             //获取请求的参数
             String userid = request.getParameter("userid");
@@ -201,16 +182,14 @@ public class CustomerController {
             MongoDatabase db = MongoUtils.getDatabase();  
             System.out.println("Connect to mongodb database successfully");  
     
-            //创建 collection
-            // db.createCollection("layor");
-            // System.out.println("集合创建成功");
+           
     
             //连接collection
             MongoCollection<Document> collection = db.getCollection("customer");
              System.out.println("集合 customer 连接成功");
     
             
-    
+            //通过用户id查找
             FindIterable findIterable = collection.find(Filters.eq("userid", userid));
             MongoCursor<Document> mongoCursor = findIterable.iterator();  
             List<Document> list2=new ArrayList<Document>();
@@ -224,26 +203,20 @@ public class CustomerController {
             @RequestMapping(value = "showadminown", method = RequestMethod.GET)
         @ResponseBody public List showadminown(HttpServletRequest request) {
      
-            //可以使用teamname获取url路径分隔
+            
             //管理员登录返回所有客户信息
     
-            //获取请求的参数
-            //String username = request.getParameter("username");
     
             //连接数据库
             MongoDatabase db = MongoUtils.getDatabase();  
             System.out.println("Connect to mongodb database successfully");  
     
-            //创建 collection
-            // db.createCollection("layor");
-            // System.out.println("集合创建成功");
+            
     
             //连接collection
             MongoCollection<Document> collection = db.getCollection("customer");
              System.out.println("集合 customer 连接成功");
-     //  List<Document> documents = new ArrayList<Document>();  
-        //  documents.add(document);  
-        //  collection.insertMany(documents); 
+     
             
     
             FindIterable findIterable = collection.find();
@@ -260,7 +233,7 @@ public class CustomerController {
         @RequestMapping(value = "showexistlawyer", method = RequestMethod.GET)
         @ResponseBody public List showexistlawyer(HttpServletRequest request) {
      
-            //可以使用teamname获取url路径分隔
+            
             //返回已存在的律师
     
     

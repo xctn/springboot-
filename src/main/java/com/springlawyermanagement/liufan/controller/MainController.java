@@ -34,7 +34,7 @@ public class MainController {
     @RequestMapping(value = "login", method = RequestMethod.GET)
     @ResponseBody public Document Login(HttpServletRequest request) {
  
-        //可以使用teamname获取url路径分隔
+        //登录
  
 
         //获取请求的参数
@@ -48,9 +48,7 @@ public class MainController {
         MongoDatabase db = MongoUtils.getDatabase();  
         System.out.println("Connect to mongodb database successfully");  
 
-        //创建 collection
-        // db.createCollection("layor");
-        // System.out.println("集合创建成功");
+       
 
         //连接collection
         MongoCollection<Document> collection = db.getCollection("user");
@@ -77,7 +75,7 @@ public class MainController {
     @RequestMapping(value = "register", method = RequestMethod.GET)
     @ResponseBody public String registeruser(HttpServletRequest request) {
  
-        //可以使用teamname获取url路径分隔
+        //注册
  
         //获取请求的参数
         String userid = CommonUtils.getUUID();
@@ -90,9 +88,7 @@ public class MainController {
         String tel  = request.getParameter("tel");
         MongoDatabase db = MongoUtils.getDatabase();  
 
-        //创建 collection
-        // db.createCollection("user");
-        // System.out.println("集合创建成功");
+        
 
         //连接collection
         MongoCollection<Document> collection = db.getCollection("user");
@@ -101,10 +97,7 @@ public class MainController {
 
         //插入User
         Document document = new Document("username", username).append("password", password).append("type", 1).append("position", position).append("age", age).append("sex", sex).append("idcard", idcard).append("tel",tel).append("userid",userid);
-
-        //  List<Document> documents = new ArrayList<Document>();  
-        //  documents.add(document);  
-        //  collection.insertMany(documents); 
+ 
         collection.insertOne(document);
         System.out.println("用户插入成功");  
         return("success");
